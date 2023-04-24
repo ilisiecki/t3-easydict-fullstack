@@ -1,4 +1,4 @@
-export const Logo = () => (
+const Logo = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="150" viewBox="0 0 350 150">
     <path
       fill="url(#paint0_linear_8_6)"
@@ -29,8 +29,8 @@ export const Logo = () => (
         y2="60"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#3bff44"></stop>
-        <stop offset="1" stop-color="#568aff"></stop>
+        <stop stopColor="#3bff44"></stop>
+        <stop offset="1" stopColor="#568aff"></stop>
       </linearGradient>
       <linearGradient
         id="paint1_linear_8_6"
@@ -40,8 +40,8 @@ export const Logo = () => (
         y2="60"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#3bff44"></stop>
-        <stop offset="1" stop-color="#568aff"></stop>
+        <stop stopColor="#3bff44"></stop>
+        <stop offset="1" stopColor="#568aff"></stop>
       </linearGradient>
       <linearGradient
         id="paint2_linear_8_6"
@@ -51,8 +51,8 @@ export const Logo = () => (
         y2="60"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#3bff44"></stop>
-        <stop offset="1" stop-color="#568aff"></stop>
+        <stop stopColor="#3bff44"></stop>
+        <stop offset="1" stopColor="#568aff"></stop>
       </linearGradient>
       <linearGradient
         id="paint3_linear_8_6"
@@ -62,9 +62,11 @@ export const Logo = () => (
         y2="60"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#3bff44"></stop>
-        <stop offset="1" stop-color="#568aff"></stop>
+        <stop stopColor="#3bff44"></stop>
+        <stop offset="1" stopColor="#568aff"></stop>
       </linearGradient>
     </defs>
   </svg>
 );
+
+export default Logo;

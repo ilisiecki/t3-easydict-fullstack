@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import { useState, useEffect } from "react";
+import Searchbar from "./components/searchbar";
 
 const Home: NextPage = () => {
   return (
@@ -14,7 +15,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="h-24 w-24 rounded-full bg-slate-600 dark:bg-pink-950"></div>
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="mb-4 flex text-3xl text-neutral-900 dark:text-white md:text-5xl">
+            Quick and easy <strong>dictionary</strong>
+          </h1>
+          <p className="text-lg md:text-xl">
+            Type a word and hit enter or search icon to find a word
+          </p>
+        </div>
+        <div className="py-8">
+          <Searchbar />
+        </div>
       </main>
     </>
   );

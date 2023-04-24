@@ -1,8 +1,7 @@
 import { useTheme } from "next-themes";
 import { memo } from "react";
-import { Sun } from "./icons/sun";
-import { Moon } from "./icons/moon";
-
+import Sun from "./icons/sun";
+import Moon from "./icons/moon";
 const ThemeButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
