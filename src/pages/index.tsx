@@ -1,9 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { useState, useEffect } from "react";
 import Searchbar from "./components/searchbar";
 
 const Home: NextPage = () => {
@@ -14,12 +12,13 @@ const Home: NextPage = () => {
         <meta name="description" content="Easy Dict Website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className="h-full w-full">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="mb-4 flex text-3xl text-neutral-900 dark:text-white md:text-5xl">
-            Quick and easy <strong>dictionary</strong>
+          <h1 className="mb-4 text-center text-3xl text-neutral-900 dark:text-white md:text-5xl">
+            Quick and easy&nbsp;
+            <span className="text-center font-bold">dictionary</span>
           </h1>
-          <p className="text-lg md:text-xl">
+          <p className="mx-4 text-center text-lg text-neutral-900 dark:text-white md:text-xl">
             Type a word and hit enter or search icon to find a word
           </p>
         </div>

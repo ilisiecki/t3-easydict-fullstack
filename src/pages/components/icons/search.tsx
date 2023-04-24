@@ -1,4 +1,4 @@
-const search = () => {
+const Search = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -6,7 +6,7 @@ const search = () => {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      className="h-6 w-6"
+      className="stroke-stroke-neutral-900 dark:white h-6 w-6"
     >
       <path
         stroke-linecap="round"
@@ -17,4 +17,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default Search;

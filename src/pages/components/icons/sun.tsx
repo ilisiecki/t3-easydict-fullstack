@@ -16,7 +16,7 @@ const Sun = () => (
       viewBox="0 0 24 24"
       strokeWidth="1.8"
       stroke="currentColor"
-      className="h-8 w-8 fill-none stroke-white"
+      className="h-8 w-8 fill-none stroke-white transition-colors duration-1000"
     >
       <path
         strokeLinecap="round"
