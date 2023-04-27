@@ -19,7 +19,7 @@ const Home: NextPage = () => {
             <span className="text-center font-bold">dictionary</span>
           </h1>
           <p className="mx-4 text-center text-lg text-neutral-900 dark:text-white md:text-xl">
-            Type a word and hit enter or search icon to find a word
+            Type a word and hit enter or search icon to find a definition
           </p>
         </div>
         <div className="py-8">
