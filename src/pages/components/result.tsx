@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useStore } from "./store/store";
+import { useStore } from "../../store/store";
 
 type Props = {
   searchedWord: string;
