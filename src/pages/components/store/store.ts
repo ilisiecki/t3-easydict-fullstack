@@ -10,11 +10,9 @@ type Actions = {
   setShouldSearch: (shouldSearch: boolean) => void;
 };
 
-const useStore = create<Store & Actions>((set) => ({
+export const useStore = create<Store & Actions>((set) => ({
   searchedWord: "",
   shouldSearch: false,
   setSearchedWord: (searchedWord) => set({ searchedWord }),
   setShouldSearch: (shouldSearch) => set({ shouldSearch }),
 }));
-
-export default useStore;
