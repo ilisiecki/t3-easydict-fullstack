@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Search from "./icons/search";
 import Result from "./result";
-import { useStore } from "./store/store";
+import useStore from "./store/store";
 
 const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
