@@ -23,7 +23,9 @@ const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 const Result = (props: Props) => {
   const [response, setResponse] = useState<Data[]>([]);
-  const [test, setTest] = useState("");
+  const [test, setTest] = useState(
+    "https://api.dictionaryapi.dev/media/pronunciations/en/ship-us.mp3"
+  );
   const [dataFetched, setDataFetched] = useState(false);
 
   const [searchedWord, setSearchedWord, shouldSearch, setShouldSearch] =
@@ -58,7 +60,6 @@ const Result = (props: Props) => {
       .pop();
     if (urlFromPhoneticsArray !== undefined) {
       setTest(urlFromPhoneticsArray?.audio);
-      console.log("test", test);
     }
   };
 
@@ -75,10 +76,8 @@ const Result = (props: Props) => {
   if (dataFetched) {
     getAudioUrl(response);
     setDataFetched(false);
-    console.log("XD");
   }
 
-  console.log(test);
   const [play] = useSound(test, {
     volume: 0.5,
   });
