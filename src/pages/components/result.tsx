@@ -17,13 +17,15 @@ type Data = {
   word: string;
   phonetic: string;
   phonetics: Phonetics[];
-  audio: string;
 };
 
 const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 const Result = (props: Props) => {
   const [response, setResponse] = useState<Data[]>([]);
+  const [test, setTest] = useState("");
+  const [dataFetched, setDataFetched] = useState(false);
+
   const [searchedWord, setSearchedWord, shouldSearch, setShouldSearch] =
     useStore((state) => [
       state.searchedWord,
@@ -32,26 +34,32 @@ const Result = (props: Props) => {
       state.setShouldSearch,
     ]);
 
-  const formatData = (data: Response) => {
-    return "data";
-  };
-
-  console.log("audioURl", response[0]?.word);
-
   const fetchData = async (word: string) => {
-    console.log("fetchuje");
     await axios
       .get<Data[]>(baseURL + "/" + `${word}`)
       .then((response) => {
+        setDataFetched(true);
         const data = response.data;
         setResponse(data);
       })
       .catch((err) => {
-        // Handle errors
+        // Handle errorss
         console.error(err);
         alert("Word not found");
       });
+
     setShouldSearch(false);
+  };
+
+  const getAudioUrl = (response: Data[]) => {
+    const phoneticsArray = response[0]?.phonetics;
+    const urlFromPhoneticsArray = phoneticsArray
+      ?.filter((item) => item.audio !== "")
+      .pop();
+    if (urlFromPhoneticsArray !== undefined) {
+      setTest(urlFromPhoneticsArray?.audio);
+      console.log("test", test);
+    }
   };
 
   useEffect(() => {
@@ -64,10 +72,14 @@ const Result = (props: Props) => {
     }
   }, [props.searchedWord, props.shouldSearch]);
 
-  const beepNotification =
-    "https://api.dictionaryapi.dev/media/pronunciations/en/ship-us.mp3";
+  if (dataFetched) {
+    getAudioUrl(response);
+    setDataFetched(false);
+    console.log("XD");
+  }
 
-  const [play] = useSound(beepNotification, {
+  console.log(test);
+  const [play] = useSound(test, {
     volume: 0.5,
   });
 
@@ -75,13 +87,6 @@ const Result = (props: Props) => {
     play();
   };
 
-  const lista = response[0]?.phonetics;
-
-  const resultLista = lista?.map((map) => {
-    console.log(map.audio);
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   return (
     <div className="flex justify-center pt-10 text-3xl">
       <div>
