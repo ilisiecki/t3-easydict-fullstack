@@ -3,6 +3,8 @@ import axios from "axios";
 import { useStore } from "../../store/store";
 import useSound from "use-sound";
 import Speaker from "./icons/speaker";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
   searchedWord: string;
@@ -39,6 +41,29 @@ const Result = (props: Props) => {
   const [dataFetched, setDataFetched] = useState(false);
   const lastItemInArray = -1;
   const [wordHaveSound, setWordHaveSound] = useState(false);
+  const notifySuccess = () =>
+    toast.success("Word found", {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      className: "text-sm",
+    });
+
+  const notifyError = (word: string) =>
+    toast.error(`Word ${word} not found, try again.`, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      className: "text-sm",
+    });
 
   const [searchedWord, setSearchedWord, shouldSearch, setShouldSearch] =
     useStore((state) => [
@@ -55,11 +80,12 @@ const Result = (props: Props) => {
         setDataFetched(true);
         const data = response.data;
         setResponse(data);
+        notifySuccess();
       })
       .catch((err) => {
         // Handle errorss
         console.error(err);
-        alert("Word not found");
+        notifyError(word);
       });
 
     setShouldSearch(false);
@@ -78,6 +104,14 @@ const Result = (props: Props) => {
     }
   };
 
+  const [play] = useSound(test, {
+    volume: 0.5,
+  });
+
+  const handleClick = () => {
+    play();
+  };
+
   useEffect(() => {
     const word = props.searchedWord;
     if (props.searchedWord !== "" && props.shouldSearch) {
@@ -92,14 +126,6 @@ const Result = (props: Props) => {
     getAudioUrl(response);
     setDataFetched(false);
   }
-
-  const [play] = useSound(test, {
-    volume: 0.5,
-  });
-
-  const handleClick = () => {
-    play();
-  };
 
   return (
     <div className="flex justify-center pt-10 text-3xl">
@@ -148,6 +174,7 @@ const Result = (props: Props) => {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };
