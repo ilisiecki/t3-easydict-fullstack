@@ -41,6 +41,7 @@ const Result = (props: Props) => {
   const [dataFetched, setDataFetched] = useState(false);
   const lastItemInArray = -1;
   const [wordHaveSound, setWordHaveSound] = useState(false);
+
   const notifySuccess = () =>
     toast.success("Word found", {
       position: "bottom-right",
@@ -55,6 +56,30 @@ const Result = (props: Props) => {
 
   const notifyError = (word: string) =>
     toast.error(`Word ${word} not found, try again.`, {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      className: "text-sm",
+    });
+
+  const notifySuccessCopyText = () =>
+    toast.success("Definition copied successfully", {
+      position: "bottom-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      className: "text-sm",
+    });
+
+  const notifyErrorCopyText = () =>
+    toast.error(`CopyText feature is not available for your setup.`, {
       position: "bottom-right",
       autoClose: 1000,
       hideProgressBar: false,
@@ -127,17 +152,43 @@ const Result = (props: Props) => {
     setDataFetched(false);
   }
 
+  const copyText = (response: Data[], indexOfDefinition: number) => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        const word = response[0]?.word as string;
+        const definition = response[0]?.meanings[0]?.definitions.at(
+          indexOfDefinition
+        )?.definition as string;
+        navigator.clipboard
+          .writeText(`${word} - ${definition}`)
+          .then(() => {
+            notifySuccessCopyText();
+          })
+          .catch((error) => {
+            console.log("Error: ", error);
+            notifyErrorCopyText();
+          });
+      } else {
+        console.log("CopyText feature is not available for your setup.");
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   return (
     <div className="flex justify-center pt-10 text-3xl">
       <div>
         {Object.keys(response).length === 0 ? (
-          <div>Waiting for a word</div>
+          <>
+            <div>Waiting for a word</div>
+          </>
         ) : (
           <>
             <div className="mx-4<< flex max-w-[24rem] gap-4 md:w-[34rem] md:max-w-full">
               {wordHaveSound ? (
                 <>
-                  <div className="flex h-10 w-10 items-center justify-center">
+                  <div className="animate-grow flex h-10 w-10 items-center justify-center">
                     <button
                       onClick={handleClick}
                       className="rounded-full p-2 hover:bg-neutral-200 dark:hover:bg-neutral-500"
@@ -168,6 +219,9 @@ const Result = (props: Props) => {
                       </div>
                     )
                   )}
+                </div>
+                <div className="border-2 border-red-500">
+                  <button onClick={() => copyText(response, 0)}>KOPIUJ</button>
                 </div>
               </div>
             </div>

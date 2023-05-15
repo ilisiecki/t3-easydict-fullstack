@@ -18,14 +18,23 @@ const Header = () => {
     <header className="flex h-24 w-full items-center justify-center">
       <div className="mx-4 flex w-full max-w-screen-lg items-center justify-between">
         <div className="flex items-center">
-          <Logo />
-          <div className="ml-8 hidden gap-2 font-semibold sm:flex">
+          <div className="animate-grow cursor-pointer">
+            <Logo />
+          </div>
+          <div className="ml-8 hidden gap-4 font-semibold sm:flex">
             <div>
-              <Link href="/">Home</Link>
+              <Link href="/" className="animate-header-options text-lg">
+                Home
+              </Link>
             </div>
             {sessionData ? (
               <div>
-                <Link href="/history">History</Link>
+                <Link
+                  href="/history"
+                  className="animate-header-options text-lg"
+                >
+                  History
+                </Link>
               </div>
             ) : (
               <></>
@@ -36,8 +45,8 @@ const Header = () => {
           <MobileMenu />
         </div>
         <div className="hidden items-center gap-2 sm:flex">
-          <div>{mounted && <ThemeButton />}</div>
-          <div>
+          <div className="animate-grow">{mounted && <ThemeButton />}</div>
+          <div className="animate-grow">
             <AuthShowcase />
           </div>
         </div>

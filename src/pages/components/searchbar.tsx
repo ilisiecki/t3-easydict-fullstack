@@ -44,7 +44,10 @@ const Searchbar = () => {
             placeholder="Type a word..."
             className="h-full w-full bg-transparent py-8 pl-4 lowercase text-neutral-800 caret-green-500 placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:text-white"
           ></input>
-          <button onClick={handleClick} className="absolute right-0 mx-4">
+          <button
+            onClick={handleClick}
+            className="animate-grow absolute right-0 mx-4"
+          >
             <Search />
           </button>
         </div>

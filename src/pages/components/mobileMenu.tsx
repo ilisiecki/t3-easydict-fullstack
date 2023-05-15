@@ -21,7 +21,7 @@ const MobileMenu = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center	">
+      <div className="animate-grow flex items-center	justify-center">
         <button
           type="button"
           onClick={openModal}
@@ -39,23 +39,23 @@ const MobileMenu = () => {
         >
           <Transition.Child as={Fragment}>
             <Dialog.Panel className="absolute top-0 h-full w-full bg-white dark:bg-neutral-900">
-              <div className="absolute right-0 top-0 mx-4 my-6">
+              <div className="animate-grow absolute right-0 top-0 mx-4 my-6">
                 <button onClick={closeModal}>
                   <Xmark />
                 </button>
               </div>
               <div className="mt-14 flex h-full w-full justify-center">
                 <div className="flex flex-col items-center gap-2">
-                  <div>
+                  <div className="animate-grow">
                     <ThemeButton isOpen={isOpen} />
                   </div>
-                  <div>
+                  <div className="animate-grow">
                     <Link onClick={closeModal} href="/">
                       Home
                     </Link>
                   </div>
                   {sessionData ? (
-                    <div>
+                    <div className="animate-grow">
                       <Link onClick={closeModal} href="/history">
                         History
                       </Link>
@@ -63,7 +63,7 @@ const MobileMenu = () => {
                   ) : (
                     <></>
                   )}
-                  <div>
+                  <div className="animate-grow">
                     <AuthShowcase isOpen={isOpen} />
                   </div>
                 </div>
