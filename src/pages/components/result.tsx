@@ -13,10 +13,20 @@ type Phonetics = {
   audio: string;
 };
 
+type Definitions = {
+  definition: string;
+};
+
+type Meanings = {
+  partOfSpeech: string;
+  definitions: Definitions[];
+};
+
 type Data = {
   word: string;
   phonetic: string;
   phonetics: Phonetics[];
+  meanings: Meanings[];
 };
 
 const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en";
@@ -27,6 +37,8 @@ const Result = (props: Props) => {
     "https://api.dictionaryapi.dev/media/pronunciations/en/ship-us.mp3"
   );
   const [dataFetched, setDataFetched] = useState(false);
+  const lastItemInArray = -1;
+  const [wordHaveSound, setWordHaveSound] = useState(false);
 
   const [searchedWord, setSearchedWord, shouldSearch, setShouldSearch] =
     useStore((state) => [
@@ -57,9 +69,12 @@ const Result = (props: Props) => {
     const phoneticsArray = response[0]?.phonetics;
     const urlFromPhoneticsArray = phoneticsArray
       ?.filter((item) => item.audio !== "")
-      .pop();
+      .at(lastItemInArray);
     if (urlFromPhoneticsArray !== undefined) {
+      setWordHaveSound(true);
       setTest(urlFromPhoneticsArray?.audio);
+    } else {
+      setWordHaveSound(false);
     }
   };
 
@@ -90,30 +105,48 @@ const Result = (props: Props) => {
     <div className="flex justify-center pt-10 text-3xl">
       <div>
         {Object.keys(response).length === 0 ? (
-          <div>Czekam na wynik</div>
+          <div>Waiting for a word</div>
         ) : (
-          <div className="flex flex-row gap-4">
-            <div className="flex items-center justify-center rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-500">
-              <button onClick={handleClick} className="p-2">
-                <Speaker />
-              </button>
+          <>
+            <div className="mx-4<< flex max-w-[24rem] gap-4 md:w-[34rem] md:max-w-full">
+              {wordHaveSound ? (
+                <>
+                  <div className="flex h-10 w-10 items-center justify-center">
+                    <button
+                      onClick={handleClick}
+                      className="rounded-full p-2 hover:bg-neutral-200 dark:hover:bg-neutral-500"
+                    >
+                      <Speaker />
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+              <div className="flex flex-col">
+                <div className="pb-4 text-base">
+                  <span className="text-3xl font-semibold capitalize">
+                    {response[0]?.word}
+                  </span>
+                  <span className="pl-4 text-2xl">{response[0]?.phonetic}</span>
+                </div>
+                <div className="text-xl capitalize">
+                  {response[0]?.meanings[0]?.partOfSpeech}
+                </div>
+                <div className="text-base">
+                  {response[0]?.meanings[0]?.definitions.map(
+                    (definition, index) => (
+                      <div key={index} className="flex pb-4">
+                        <div className="-ml-12">({index})</div>
+                        <div className="ml-8">{definition.definition}</div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="text-2xl capitalize">
-              Word:{" "}
-              <span className="text-3xl font-bold">{response[0]?.word}</span>
-            </div>
-            <div className="text-2xl">
-              Phonetic:{" "}
-              <span className="text-3xl font-bold">
-                {response[0]?.phonetic}
-              </span>
-            </div>
-          </div>
+          </>
         )}
-        {Object.keys(response).map((key) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          return <div key={key}>{response[key].word}</div>;
-        })}
       </div>
     </div>
   );
