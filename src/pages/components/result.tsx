@@ -145,7 +145,7 @@ const Result = (props: Props) => {
         console.error(err);
       });
     }
-  }, [props.searchedWord, props.shouldSearch]);
+  });
 
   if (dataFetched) {
     getAudioUrl(response);
@@ -156,11 +156,12 @@ const Result = (props: Props) => {
     try {
       if (navigator?.clipboard?.writeText) {
         const word = response[0]?.word as string;
+        const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
         const definition = response[0]?.meanings[0]?.definitions.at(
           indexOfDefinition
         )?.definition as string;
         navigator.clipboard
-          .writeText(`${word} - ${definition}`)
+          .writeText(`${capitalizedWord} - ${definition}`)
           .then(() => {
             notifySuccessCopyText();
           })
@@ -185,7 +186,7 @@ const Result = (props: Props) => {
           </>
         ) : (
           <>
-            <div className="mx-4<< flex max-w-[24rem] gap-4 md:w-[34rem] md:max-w-full">
+            <div className="mx-4 flex max-w-[24rem] gap-4 md:w-[34rem] md:max-w-full">
               {wordHaveSound ? (
                 <>
                   <div className="animate-grow flex h-10 w-10 items-center justify-center">
@@ -207,21 +208,33 @@ const Result = (props: Props) => {
                   </span>
                   <span className="pl-4 text-2xl">{response[0]?.phonetic}</span>
                 </div>
-                <div className="text-xl capitalize">
+                <div className="pb-4 text-xl capitalize">
                   {response[0]?.meanings[0]?.partOfSpeech}
                 </div>
                 <div className="text-base">
-                  {response[0]?.meanings[0]?.definitions.map(
-                    (definition, index) => (
-                      <div key={index} className="flex pb-4">
-                        <div className="-ml-12">({index})</div>
-                        <div className="ml-8">{definition.definition}</div>
-                      </div>
-                    )
-                  )}
-                </div>
-                <div className="border-2 border-red-500">
-                  <button onClick={() => copyText(response, 0)}>KOPIUJ</button>
+                  <div className="w-ful">
+                    <div className="absolute right-0 w-full sm:relative">
+                      {response[0]?.meanings[0]?.definitions.map(
+                        (definition, index) => (
+                          <div
+                            key={index}
+                            onClick={() => copyText(response, index)}
+                            className="relative mb-4 w-full cursor-pointer bg-neutral-200 dark:bg-neutral-800"
+                          >
+                            <div className="flex px-2">
+                              <div className="my-5 ml-1">({index})</div>
+                              <div className="my-5 ml-2 flex items-center">
+                                {definition.definition}
+                              </div>
+                              <span className="absolute bottom-0 right-0 mb-1 mr-4 cursor-pointer text-xs text-neutral-400 dark:text-neutral-600">
+                                Click to copy
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
