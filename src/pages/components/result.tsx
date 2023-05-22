@@ -5,6 +5,7 @@ import useSound from "use-sound";
 import Speaker from "./icons/speaker";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 type Props = {
   searchedWord: string;
@@ -152,31 +153,6 @@ const Result = (props: Props) => {
     setDataFetched(false);
   }
 
-  const copyText = (response: Data[], indexOfDefinition: number) => {
-    try {
-      if (navigator?.clipboard?.writeText) {
-        const word = response[0]?.word as string;
-        const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
-        const definition = response[0]?.meanings[0]?.definitions.at(
-          indexOfDefinition
-        )?.definition as string;
-        navigator.clipboard
-          .writeText(`${capitalizedWord} - ${definition}`)
-          .then(() => {
-            notifySuccessCopyText();
-          })
-          .catch((error) => {
-            console.log("Error: ", error);
-            notifyErrorCopyText();
-          });
-      } else {
-        console.log("CopyText feature is not available for your setup.");
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  };
-
   return (
     <div className="flex justify-center pt-10 text-3xl">
       <div>
@@ -215,23 +191,35 @@ const Result = (props: Props) => {
                   <div className="w-ful">
                     <div className="absolute right-0 w-full sm:relative">
                       {response[0]?.meanings[0]?.definitions.map(
-                        (definition, index) => (
-                          <div
-                            key={index}
-                            onClick={() => copyText(response, index)}
-                            className="relative mb-4 w-full cursor-pointer bg-neutral-200 dark:bg-neutral-800"
-                          >
-                            <div className="flex px-2">
-                              <div className="my-5 ml-1">({index})</div>
-                              <div className="my-5 ml-2 flex items-center">
-                                {definition.definition}
+                        (definition, index) => {
+                          const wordToCopy = response[0]?.word as string;
+                          const capitalizedWordToCopy =
+                            wordToCopy.charAt(0).toUpperCase() +
+                            wordToCopy.slice(1);
+                          const definitionToCopy =
+                            response[0]?.meanings[0]?.definitions.at(index)
+                              ?.definition as string;
+                          const combinedToCopy = `${capitalizedWordToCopy} - ${definitionToCopy}`;
+
+                          return (
+                            <CopyToClipboard key={index} text={combinedToCopy}>
+                              <div
+                                onClick={notifySuccessCopyText}
+                                className="relative mb-4 w-full cursor-pointer bg-neutral-200 dark:bg-neutral-800"
+                              >
+                                <div className="flex px-2">
+                                  <div className="my-5 ml-1">({index})</div>
+                                  <div className="my-5 ml-2 flex items-center">
+                                    {definition.definition}
+                                  </div>
+                                  <span className="absolute bottom-0 right-0 mb-1 mr-4 cursor-pointer text-xs text-neutral-400 dark:text-neutral-600">
+                                    Click to copy
+                                  </span>
+                                </div>
                               </div>
-                              <span className="absolute bottom-0 right-0 mb-1 mr-4 cursor-pointer text-xs text-neutral-400 dark:text-neutral-600">
-                                Click to copy
-                              </span>
-                            </div>
-                          </div>
-                        )
+                            </CopyToClipboard>
+                          );
+                        }
                       )}
                     </div>
                   </div>
