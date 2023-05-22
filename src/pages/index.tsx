@@ -1,7 +1,5 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { api } from "~/utils/api";
 import Searchbar from "./components/searchbar";
 
 const Home: NextPage = () => {
@@ -32,26 +30,58 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const AuthShowcase: React.FC = () => {
-  const { data: sessionData } = useSession();
+/*type History = RouterOutputs["history"]["getAll"][0];
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
+const Content: React.FC = () => {
+  const [selectedHistory, setSelectedHistory] = useState<History | null>(null);
+  const { data: sessionData } = useSession();
+  const { data: history, refetch: refetchHistory } =
+    api.history.getAll.useQuery(undefined, {
+      enabled: sessionData?.user !== undefined,
+    });
+
+  const createHistory = api.history.create.useMutation({
+    onSuccess: () => {
+      void refetchHistory();
+    },
+  });
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
+    <div>
+      <div>
+        wyswietlam
+        <ul>
+          {history?.map((history) => (
+            <li key={history.id}>
+              <a
+                href="#"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  setSelectedHistory(history);
+                }}
+              >
+                {history.searchedWord}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        wprowadzam
+        <input
+          type="text"
+          placeholder="New History"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              createHistory.mutate({
+                searchedWord: e.currentTarget.value,
+              });
+              e.currentTarget.value = "";
+            }
+          }}
+        />
+      </div>
     </div>
   );
 };
+*/

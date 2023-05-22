@@ -6,6 +6,7 @@ import Speaker from "./icons/speaker";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { api } from "~/utils/api";
 
 type Props = {
   searchedWord: string;
@@ -36,12 +37,13 @@ const baseURL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 const Result = (props: Props) => {
   const [response, setResponse] = useState<Data[]>([]);
-  const [test, setTest] = useState(
+  const [audio, setAudio] = useState(
     "https://api.dictionaryapi.dev/media/pronunciations/en/ship-us.mp3"
   );
   const [dataFetched, setDataFetched] = useState(false);
   const lastItemInArray = -1;
   const [wordHaveSound, setWordHaveSound] = useState(false);
+  const createHistory = api.history.create.useMutation({});
 
   const notifySuccess = () =>
     toast.success("Word found", {
@@ -79,25 +81,7 @@ const Result = (props: Props) => {
       className: "text-sm",
     });
 
-  const notifyErrorCopyText = () =>
-    toast.error(`CopyText feature is not available for your setup.`, {
-      position: "bottom-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      className: "text-sm",
-    });
-
-  const [searchedWord, setSearchedWord, shouldSearch, setShouldSearch] =
-    useStore((state) => [
-      state.searchedWord,
-      state.setSearchedWord,
-      state.shouldSearch,
-      state.setShouldSearch,
-    ]);
+  const [setShouldSearch] = useStore((state) => [state.setShouldSearch]);
 
   const fetchData = async (word: string) => {
     await axios
@@ -107,6 +91,9 @@ const Result = (props: Props) => {
         const data = response.data;
         setResponse(data);
         notifySuccess();
+        createHistory.mutate({
+          searchedWord: props.searchedWord,
+        });
       })
       .catch((err) => {
         // Handle errorss
@@ -124,13 +111,13 @@ const Result = (props: Props) => {
       .at(lastItemInArray);
     if (urlFromPhoneticsArray !== undefined) {
       setWordHaveSound(true);
-      setTest(urlFromPhoneticsArray?.audio);
+      setAudio(urlFromPhoneticsArray?.audio);
     } else {
       setWordHaveSound(false);
     }
   };
 
-  const [play] = useSound(test, {
+  const [play] = useSound(audio, {
     volume: 0.5,
   });
 
@@ -207,7 +194,7 @@ const Result = (props: Props) => {
                                 onClick={notifySuccessCopyText}
                                 className="relative mb-4 w-full cursor-pointer bg-neutral-200 dark:bg-neutral-800"
                               >
-                                <div className="flex px-2">
+                                <div className="flex px-8">
                                   <div className="my-5 ml-1">({index})</div>
                                   <div className="my-5 ml-2 flex items-center">
                                     {definition.definition}

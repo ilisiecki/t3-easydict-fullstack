@@ -19,7 +19,9 @@ const Header = () => {
       <div className="mx-4 flex w-full max-w-screen-lg items-center justify-between">
         <div className="flex items-center">
           <div className="animate-grow cursor-pointer">
-            <Logo />
+            <Link href="/">
+              <Logo />
+            </Link>
           </div>
           <div className="ml-8 hidden gap-4 font-semibold sm:flex">
             <div>

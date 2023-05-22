@@ -55,6 +55,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    history       History[]
 }
 
 model VerificationToken {
@@ -63,4 +64,14 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model History {
+    id            String    @id @default(cuid())
+    searchedWord  String
+    userId        String
+    user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([searchedWord])
+    @@index([userId])
 }
